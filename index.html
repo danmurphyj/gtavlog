@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CJ House 360</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
+    #panorama { width: 100%; height: 100vh; }
+
+    /* ===== TICKER TOP LEFT ===== */
+    .ticker-wrap {
+      position: fixed;
+      top: 18px; left: 18px;
+      z-index: 100;
+      background: rgba(0,0,0,0.72);
+      border: 2px solid #00ff88;
+      border-radius: 10px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 16px #00ff8866;
+    }
+    .ticker-dot {
+      width: 10px; height: 10px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: blink 1.2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    .ticker-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #00ff88;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #00ff88;
+    }
+    .ticker-sub {
+      font-size: 12px;
+      color: #aaffcc;
+      letter-spacing: 1px;
+    }
+
+    /* ===== SOCIAL BUTTONS TOP RIGHT ===== */
+    .socials {
+      position: fixed;
+      top: 18px; right: 18px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .social-btn {
+      width: 48px; height: 48px;
+      background: rgba(0,0,0,0.72);
+      border: 2px solid #00ff88;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 10px #00ff8844;
+      text-decoration: none;
+    }
+    .social-btn:hover {
+      background: #00ff88;
+      box-shadow: 0 0 20px #00ff88;
+      transform: scale(1.12);
+    }
+    .social-btn img {
+      width: 26px; height: 26px;
+      filter: invert(1) brightness(2);
+      transition: filter 0.2s;
+    }
+    .social-btn:hover img { filter: invert(0) brightness(0); }
+
+    /* ===== CENTER CA + BUY ===== */
+    .center-ui {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .ca-box {
+      background: rgba(0,0,0,0.75);
+      border: 2px solid #00ff88;
+      border-radius: 10px;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .ca-box:hover { box-shadow: 0 0 18px #00ff88; }
+    .ca-label {
+      color: #aaffcc;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .ca-address {
+      color: #00ff88;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-family: monospace;
+    }
+    .ca-copy {
+      color: #00ff88;
+      font-size: 18px;
+      transition: transform 0.2s;
+    }
+    .ca-box:hover .ca-copy { transform: scale(1.3); }
+    .buy-btn {
+      background: linear-gradient(135deg, #00ff88, #00cc66);
+      color: #000;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 48px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00ff8899;
+      transition: all 0.2s;
+    }
+    .buy-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 36px #00ff88;
+    }
+
+    /* ===== SCENE SWITCHER BOTTOM ===== */
+    .scenes {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 14px;
+    }
+    .scene-btn {
+      background: rgba(0,0,0,0.75);
+      border: 2px solid #555;
+      border-radius: 12px;
+      padding: 8px 22px;
+      color: #aaa;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .scene-btn:hover, .scene-btn.active {
+      border-color: #00ff88;
+      color: #00ff88;
+      box-shadow: 0 0 14px #00ff8866;
+    }
+
+    /* ===== COPY TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 160px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #00ff88;
+      color: #000;
+      font-weight: 700;
+      padding: 8px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 200;
+    }
+    .toast.show { opacity: 1; }
+    /* ===== TICKER TOP LEFT — GRAFFITI ===== */
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+.ticker-wrap {
+  position: fixed;
+  top: 18px; left: 18px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.82);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 22px 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Graffiti spray-paint glow */
+  box-shadow:
+    0 0 0 3px #1aff6e,
+    0 0 18px #00ff6688,
+    0 0 40px #00ff4433,
+    4px 4px 0px #005522;
+  /* Slightly rotated like a tag on a wall */
+  transform: rotate(-1.5deg);
+  /* Spray splatter border via clip-path */
+  clip-path: polygon(
+    0% 4%, 3% 0%, 97% 0%, 100% 3%,
+    100% 97%, 97% 100%, 3% 100%, 0% 96%
+  );
+}
+
+.ticker-dot {
+  width: 12px; height: 12px;
+  background: radial-gradient(circle, #aaff66, #00ff44);
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ff88, 0 0 20px #00ff4466;
+  animation: blink 1.2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
+
+.ticker-text {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 28px;
+  color: #00ff55;
+  letter-spacing: 3px;
+  /* Graffiti multi-layer text shadow */
+  text-shadow:
+    0 0 6px #00ff88,
+    0 0 16px #00ff5588,
+    2px 2px 0 #003311,
+    -1px -1px 0 #005522,
+    3px 3px 8px rgba(0,0,0,0.8);
+  line-height: 1;
+}
+
+.ticker-sub {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 11px;
+  color: #66ff99;
+  letter-spacing: 2px;
+  text-shadow: 0 0 6px #00ff6644, 1px 1px 0 #002211;
+  opacity: 0.85;
+}
+
+/* Spray drip effect via ::after */
+.ticker-wrap::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: 20px;
+  width: 6px; height: 10px;
+  background: #1aff6e;
+  border-radius: 0 0 4px 4px;
+  opacity: 0.7;
+  filter: blur(1px);
+}
+.ticker-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; right: 30px;
+  width: 4px; height: 8px;
+  background: #00ff55;
+  border-radius: 0 0 3px 3px;
+  opacity: 0.5;
+  filter: blur(1px);
+}
+  </style>
+</head>
+<body>
+
+  <div id="panorama"></div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div>
+      <div class="ticker-text">$GTAVLOG</div>
+    </div>
+  </div>
+
+  <!-- SOCIAL BUTTONS -->
+  <div class="socials">
+    <a href="https://twitter.com/" target="_blank" class="social-btn" title="Twitter/X">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg" alt="X"/>
+    </a>
+    <a href="https://t.me/" target="_blank" class="social-btn" title="Telegram">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram"/>
+    </a>
+    <a href="https://dexscreener.com/" target="_blank" class="social-btn" title="DexScreener">
+      <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/dexscreener.svg" alt="DexScreener" onerror="this.src='https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/ethereum.svg'"/>
+    </a>
+  </div>
+
+  <!-- CENTER: CA + BUY -->
+  <div class="center-ui">
+    <div class="ca-box" onclick="copyCA()">
+      <span class="ca-label">CA</span>
+      <span class="ca-address" id="ca">GrOvEsTrEeT...LoSSaNtOs</span>
+      <span class="ca-copy">⧉</span>
+    </div>
+    <button class="buy-btn" onclick="window.open('https://raydium.io/','_blank')">BUY NOW</button>
+  </div>
+
+  <!-- SCENE SWITCHER -->
+  <div class="scenes">
+    <button class="scene-btn active" onclick="switchScene(0, this)">🏠 House</button>
+    <button class="scene-btn" onclick="switchScene(1, this)">🌆 Street</button>
+    <button class="scene-btn" onclick="switchScene(2, this)">🌴 Grove</button>
+  </div>
+
+  <!-- COPY TOAST -->
+  <div class="toast" id="toast">Address copied!</div>
+
+  <script>
+    const scenes = [
+      { panorama: '1.png', title: 'CJ House' },
+      { panorama: '2.png', title: 'Grove Street' },
+      { panorama: '3.png', title: 'Los Santos' }
+    ];
+
+    let viewer = pannellum.viewer('panorama', {
+      type: 'equirectangular',
+      panorama: scenes[0].panorama,
+      autoLoad: true,
+      autoRotate: -2,
+      showZoomCtrl: false,
+      showFullscreenCtrl: false
+    });
+
+    function switchScene(index, btn) {
+      document.querySelectorAll('.scene-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      viewer.destroy();
+      viewer = pannellum.viewer('panorama', {
+        type: 'equirectangular',
+        panorama: scenes[index].panorama,
+        autoLoad: true,
+        autoRotate: -2,
+        showZoomCtrl: false,
+        showFullscreenCtrl: false
+      });
+    }
+
+    function copyCA() {
+      const ca = document.getElementById('ca').innerText;
+      navigator.clipboard.writeText(ca).then(() => {
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
+      });
+    }
+  </script>
+</body>
+</html>

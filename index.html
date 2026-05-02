@@ -3,49 +3,178 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>$GTAVLOG</title>
+  <title>CJ House 360</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css"/>
   <script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@700&family=Permanent+Marker&display=swap" rel="stylesheet"/>
   <link rel="icon" href="/favicon.ico">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #000; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
     #panorama { width: 100%; height: 100vh; }
 
-    /* ===== TICKER TOP LEFT ===== */
+    /* ===== TICKER TOP LEFT — GRAFFITI ===== */
     .ticker-wrap {
       position: fixed;
       top: 18px; left: 18px;
       z-index: 100;
-      background: rgba(0,0,0,0.72);
-      border: 2px solid #00ff88;
-      border-radius: 10px;
-      padding: 8px 18px;
+      background: rgba(0, 0, 0, 0.82);
+      border: none;
+      border-radius: 4px;
+      padding: 10px 22px 10px 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 16px #00ff8866;
+      gap: 12px;
+      box-shadow:
+        0 0 0 3px #1aff6e,
+        0 0 18px #00ff6688,
+        0 0 40px #00ff4433,
+        4px 4px 0px #005522;
+      transform: rotate(-1.5deg);
+      clip-path: polygon(
+        0% 4%, 3% 0%, 97% 0%, 100% 3%,
+        100% 97%, 97% 100%, 3% 100%, 0% 96%
+      );
     }
     .ticker-dot {
-      width: 10px; height: 10px;
-      background: #00ff88;
+      width: 12px; height: 12px;
+      background: radial-gradient(circle, #aaff66, #00ff44);
       border-radius: 50%;
+      box-shadow: 0 0 8px #00ff88, 0 0 20px #00ff4466;
       animation: blink 1.2s infinite;
+      flex-shrink: 0;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
     .ticker-text {
-      font-size: 22px;
-      font-weight: 700;
-      color: #00ff88;
-      letter-spacing: 2px;
-      text-shadow: 0 0 8px #00ff88;
+      font-family: 'Permanent Marker', cursive;
+      font-size: 28px;
+      color: #00ff55;
+      letter-spacing: 3px;
+      text-shadow:
+        0 0 6px #00ff88,
+        0 0 16px #00ff5588,
+        2px 2px 0 #003311,
+        -1px -1px 0 #005522,
+        3px 3px 8px rgba(0,0,0,0.8);
+      line-height: 1;
     }
-    .ticker-sub {
-      font-size: 12px;
+    .ticker-wrap::before {
+      content: '';
+      position: absolute;
+      top: -3px; left: 20px;
+      width: 6px; height: 10px;
+      background: #1aff6e;
+      border-radius: 0 0 4px 4px;
+      opacity: 0.7;
+      filter: blur(1px);
+    }
+    .ticker-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; right: 30px;
+      width: 4px; height: 8px;
+      background: #00ff55;
+      border-radius: 0 0 3px 3px;
+      opacity: 0.5;
+      filter: blur(1px);
+    }
+
+    /* ===== LORE BOX — бегущая строка на десктопе ===== */
+    .lore-box {
+      position: fixed;
+      top: 110px; left: 18px;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.85);
+      border: none;
+      border-radius: 4px;
+      padding: 14px 20px;
+      width: clamp(280px, 28vw, 520px);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 2px #1aff6e,
+        0 0 20px #00ff6666,
+        4px 4px 0px #003311;
+      transform: rotate(1deg);
+      clip-path: polygon(
+        0% 3%, 2% 0%, 98% 0%, 100% 2%,
+        100% 98%, 98% 100%, 2% 100%, 0% 97%
+      );
+      animation: lore-flicker 4s infinite;
+    }
+    @keyframes lore-flicker {
+      0%,95%,100% { opacity: 1; }
+      96% { opacity: 0.65; }
+      97% { opacity: 1; }
+      98% { opacity: 0.45; }
+    }
+    .lore-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .lore-icon {
+      font-size: clamp(20px, 2.5vw, 26px);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .lore-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(14px, 1.6vw, 20px);
+      color: #00ff55;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px #00ff88, 1px 1px 0 #003311;
+      line-height: 1;
+    }
+    .lore-marquee-wrap {
+      width: 100%;
+      overflow: hidden;
+    }
+    .lore-marquee {
+      display: inline-block;
+      white-space: nowrap;
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(16px, 1.6vw, 22px);
       color: #aaffcc;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      line-height: 1.5;
+      text-shadow: 0 0 6px #00ff4455;
+      animation: marquee-scroll 16s linear infinite;
+      padding-right: 60px;
+    }
+    .lore-marquee span {
+      color: #00ff88;
+      text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff4488;
+    }
+    @keyframes marquee-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ===== МОБИЛЬНЫЕ ≤ 600px — статичный блок ===== */
+    @media (max-width: 600px) {
+      .lore-box {
+        top: auto;
+        bottom: 178px;
+        left: 50%;
+        transform: translateX(-50%) rotate(0deg);
+        width: calc(100vw - 36px);
+        max-width: 420px;
+        padding: 12px 16px;
+      }
+      .lore-marquee {
+        display: block;
+        white-space: normal;
+        animation: none;
+        font-size: 18px;
+        letter-spacing: 1px;
+        line-height: 1.7;
+        padding-right: 0;
+      }
+      .lore-header { margin-bottom: 6px; }
+      .lore-title { font-size: 16px; }
+      .lore-icon { font-size: 20px; }
     }
 
     /* ===== SOCIAL BUTTONS TOP RIGHT ===== */
@@ -81,7 +210,12 @@
       filter: invert(1) brightness(2);
       transition: filter 0.2s;
     }
+    .social-btn svg {
+      width: 26px; height: 26px;
+      transition: filter 0.2s;
+    }
     .social-btn:hover img { filter: invert(0) brightness(0); }
+    .social-btn:hover svg { filter: invert(1) brightness(0); }
 
     /* ===== CENTER CA + BUY ===== */
     .center-ui {
@@ -195,91 +329,6 @@
       z-index: 200;
     }
     .toast.show { opacity: 1; }
-    /* ===== TICKER TOP LEFT — GRAFFITI ===== */
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
-
-.ticker-wrap {
-  position: fixed;
-  top: 18px; left: 18px;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.82);
-  border: none;
-  border-radius: 4px;
-  padding: 10px 22px 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  /* Graffiti spray-paint glow */
-  box-shadow:
-    0 0 0 3px #1aff6e,
-    0 0 18px #00ff6688,
-    0 0 40px #00ff4433,
-    4px 4px 0px #005522;
-  /* Slightly rotated like a tag on a wall */
-  transform: rotate(-1.5deg);
-  /* Spray splatter border via clip-path */
-  clip-path: polygon(
-    0% 4%, 3% 0%, 97% 0%, 100% 3%,
-    100% 97%, 97% 100%, 3% 100%, 0% 96%
-  );
-}
-
-.ticker-dot {
-  width: 12px; height: 12px;
-  background: radial-gradient(circle, #aaff66, #00ff44);
-  border-radius: 50%;
-  box-shadow: 0 0 8px #00ff88, 0 0 20px #00ff4466;
-  animation: blink 1.2s infinite;
-  flex-shrink: 0;
-}
-
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.15} }
-
-.ticker-text {
-  font-family: 'Permanent Marker', cursive;
-  font-size: 28px;
-  color: #00ff55;
-  letter-spacing: 3px;
-  /* Graffiti multi-layer text shadow */
-  text-shadow:
-    0 0 6px #00ff88,
-    0 0 16px #00ff5588,
-    2px 2px 0 #003311,
-    -1px -1px 0 #005522,
-    3px 3px 8px rgba(0,0,0,0.8);
-  line-height: 1;
-}
-
-.ticker-sub {
-  font-family: 'Permanent Marker', cursive;
-  font-size: 11px;
-  color: #66ff99;
-  letter-spacing: 2px;
-  text-shadow: 0 0 6px #00ff6644, 1px 1px 0 #002211;
-  opacity: 0.85;
-}
-
-/* Spray drip effect via ::after */
-.ticker-wrap::before {
-  content: '';
-  position: absolute;
-  top: -3px; left: 20px;
-  width: 6px; height: 10px;
-  background: #1aff6e;
-  border-radius: 0 0 4px 4px;
-  opacity: 0.7;
-  filter: blur(1px);
-}
-.ticker-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; right: 30px;
-  width: 4px; height: 8px;
-  background: #00ff55;
-  border-radius: 0 0 3px 3px;
-  opacity: 0.5;
-  filter: blur(1px);
-}
   </style>
 </head>
 <body>
@@ -288,8 +337,23 @@
 
   <!-- TICKER -->
   <div class="ticker-wrap">
+    <div class="ticker-dot"></div>
     <div>
       <div class="ticker-text">$GTAVLOG</div>
+    </div>
+  </div>
+
+  <!-- LORE TAG -->
+  <div class="lore-box">
+    <div class="lore-header">
+      <span class="lore-icon">📹</span>
+      <div class="lore-title">Breaking News</div>
+    </div>
+    <div class="lore-marquee-wrap">
+      <div class="lore-marquee">
+        <span>CJ</span> bought a camera &nbsp;•&nbsp; Grove Street's finest decided to become a <span>blogger</span> &nbsp;•&nbsp; No cap. On God. FR FR. &nbsp;•&nbsp;&nbsp;
+        <span>CJ</span> bought a camera &nbsp;•&nbsp; Grove Street's finest decided to become a <span>blogger</span> &nbsp;•&nbsp; No cap. On God. FR FR. &nbsp;•&nbsp;&nbsp;
+      </div>
     </div>
   </div>
 
@@ -302,7 +366,8 @@
       <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/telegram.svg" alt="Telegram"/>
     </a>
     <a href="https://dexscreener.com/solana/ceny19fgtecsw9he4bw7pda1sjdxyd3ycd2ew9zalzc5" target="_blank" class="social-btn" title="DexScreener">
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="#fff" fill-rule="evenodd" viewBox="0 0 252 300" focusable="false" class="chakra-icon custom-euf446"><path d="M151.818 106.866c9.177-4.576 20.854-11.312 32.545-20.541 2.465 5.119 2.735 9.586 1.465 13.193-.9 2.542-2.596 4.753-4.826 6.512-2.415 1.901-5.431 3.285-8.765 4.033-6.326 1.425-13.712.593-20.419-3.197m1.591 46.886l12.148 7.017c-24.804 13.902-31.547 39.716-39.557 64.859-8.009-25.143-14.753-50.957-39.556-64.859l12.148-7.017a5.95 5.95 0 003.84-5.845c-1.113-23.547 5.245-33.96 13.821-40.498 3.076-2.342 6.434-3.518 9.747-3.518s6.671 1.176 9.748 3.518c8.576 6.538 14.934 16.951 13.821 40.498a5.95 5.95 0 003.84 5.845zM126 0c14.042.377 28.119 3.103 40.336 8.406 8.46 3.677 16.354 8.534 23.502 14.342 3.228 2.622 5.886 5.155 8.814 8.071 7.897.273 19.438-8.5 24.796-16.709-9.221 30.23-51.299 65.929-80.43 79.589-.012-.005-.02-.012-.029-.018-5.228-3.992-11.108-5.988-16.989-5.988s-11.76 1.996-16.988 5.988c-.009.005-.017.014-.029.018-29.132-13.66-71.209-49.359-80.43-79.589 5.357 8.209 16.898 16.982 24.795 16.709 2.929-2.915 5.587-5.449 8.814-8.071C69.31 16.94 77.204 12.083 85.664 8.406 97.882 3.103 111.959.377 126 0m-25.818 106.866c-9.176-4.576-20.854-11.312-32.544-20.541-2.465 5.119-2.735 9.586-1.466 13.193.901 2.542 2.597 4.753 4.826 6.512 2.416 1.901 5.432 3.285 8.766 4.033 6.326 1.425 13.711.593 20.418-3.197"></path><path d="M197.167 75.016c6.436-6.495 12.107-13.684 16.667-20.099l2.316 4.359c7.456 14.917 11.33 29.774 11.33 46.494l-.016 26.532.14 13.754c.54 33.766 7.846 67.929 24.396 99.193l-34.627-27.922-24.501 39.759-25.74-24.231L126 299.604l-41.132-66.748-25.739 24.231-24.501-39.759L0 245.25c16.55-31.264 23.856-65.427 24.397-99.193l.14-13.754-.016-26.532c0-16.721 3.873-31.578 11.331-46.494l2.315-4.359c4.56 6.415 10.23 13.603 16.667 20.099l-2.01 4.175c-3.905 8.109-5.198 17.176-2.156 25.799 1.961 5.554 5.54 10.317 10.154 13.953 4.48 3.531 9.782 5.911 15.333 7.161 3.616.814 7.3 1.149 10.96 1.035-.854 4.841-1.227 9.862-1.251 14.978L53.2 160.984l25.206 14.129a41.926 41.926 0 015.734 3.869c20.781 18.658 33.275 73.855 41.861 100.816 8.587-26.961 21.08-82.158 41.862-100.816a41.865 41.865 0 015.734-3.869l25.206-14.129-32.665-18.866c-.024-5.116-.397-10.137-1.251-14.978 3.66.114 7.344-.221 10.96-1.035 5.551-1.25 10.854-3.63 15.333-7.161 4.613-3.636 8.193-8.399 10.153-13.953 3.043-8.623 1.749-17.689-2.155-25.799l-2.01-4.175z"></path></svg>    </a>
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="#fff" fill-rule="evenodd" viewBox="0 0 252 300" focusable="false"><path d="M151.818 106.866c9.177-4.576 20.854-11.312 32.545-20.541 2.465 5.119 2.735 9.586 1.465 13.193-.9 2.542-2.596 4.753-4.826 6.512-2.415 1.901-5.431 3.285-8.765 4.033-6.326 1.425-13.712.593-20.419-3.197m1.591 46.886l12.148 7.017c-24.804 13.902-31.547 39.716-39.557 64.859-8.009-25.143-14.753-50.957-39.556-64.859l12.148-7.017a5.95 5.95 0 003.84-5.845c-1.113-23.547 5.245-33.96 13.821-40.498 3.076-2.342 6.434-3.518 9.747-3.518s6.671 1.176 9.748 3.518c8.576 6.538 14.934 16.951 13.821 40.498a5.95 5.95 0 003.84 5.845zM126 0c14.042.377 28.119 3.103 40.336 8.406 8.46 3.677 16.354 8.534 23.502 14.342 3.228 2.622 5.886 5.155 8.814 8.071 7.897.273 19.438-8.5 24.796-16.709-9.221 30.23-51.299 65.929-80.43 79.589-.012-.005-.02-.012-.029-.018-5.228-3.992-11.108-5.988-16.989-5.988s-11.76 1.996-16.988 5.988c-.009.005-.017.014-.029.018-29.132-13.66-71.209-49.359-80.43-79.589 5.357 8.209 16.898 16.982 24.795 16.709 2.929-2.915 5.587-5.449 8.814-8.071C69.31 16.94 77.204 12.083 85.664 8.406 97.882 3.103 111.959.377 126 0m-25.818 106.866c-9.176-4.576-20.854-11.312-32.544-20.541-2.465 5.119-2.735 9.586-1.466 13.193.901 2.542 2.597 4.753 4.826 6.512 2.416 1.901 5.432 3.285 8.766 4.033 6.326 1.425 13.711.593 20.418-3.197"></path><path d="M197.167 75.016c6.436-6.495 12.107-13.684 16.667-20.099l2.316 4.359c7.456 14.917 11.33 29.774 11.33 46.494l-.016 26.532.14 13.754c.54 33.766 7.846 67.929 24.396 99.193l-34.627-27.922-24.501 39.759-25.74-24.231L126 299.604l-41.132-66.748-25.739 24.231-24.501-39.759L0 245.25c16.55-31.264 23.856-65.427 24.397-99.193l.14-13.754-.016-26.532c0-16.721 3.873-31.578 11.331-46.494l2.315-4.359c4.56 6.415 10.23 13.603 16.667 20.099l-2.01 4.175c-3.905 8.109-5.198 17.176-2.156 25.799 1.961 5.554 5.54 10.317 10.154 13.953 4.48 3.531 9.782 5.911 15.333 7.161 3.616.814 7.3 1.149 10.96 1.035-.854 4.841-1.227 9.862-1.251 14.978L53.2 160.984l25.206 14.129a41.926 41.926 0 015.734 3.869c20.781 18.658 33.275 73.855 41.861 100.816 8.587-26.961 21.08-82.158 41.862-100.816a41.865 41.865 0 015.734-3.869l25.206-14.129-32.665-18.866c-.024-5.116-.397-10.137-1.251-14.978 3.66.114 7.344-.221 10.96-1.035 5.551-1.25 10.854-3.63 15.333-7.161 4.613-3.636 8.193-8.399 10.153-13.953 3.043-8.623 1.749-17.689-2.155-25.799l-2.01-4.175z"></path></svg>
+    </a>
   </div>
 
   <!-- CENTER: CA + BUY -->
